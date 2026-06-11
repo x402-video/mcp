@@ -1,0 +1,51 @@
+{
+  "name": "x402-video-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for x402-video.com — pay-per-call AI video generation over the x402 protocol (USDC on Base). Quote, pay, generate, poll — no accounts, no API keys.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "x402-video-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/x402-video/mcp.git"
+  },
+  "homepage": "https://x402-video.com",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "x402",
+    "http-402",
+    "ai-video",
+    "video-generation",
+    "text-to-video",
+    "seedance",
+    "usdc",
+    "base",
+    "micropayments",
+    "agent-payments"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@x402/evm": "^2.14.0",
+    "@x402/fetch": "^2.14.0",
+    "viem": "^2.21.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
