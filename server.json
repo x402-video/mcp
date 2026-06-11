@@ -1,0 +1,42 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.x402-video/mcp",
+  "description": "Generate AI video and pay per call in USDC on Base via x402. Quote exact prices free, pay gasless, poll for the video URL. No accounts, no API keys.",
+  "repository": {
+    "url": "https://github.com/x402-video/mcp",
+    "source": "github"
+  },
+  "version": "0.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "x402-video-mcp",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "BUYER_PRIVATE_KEY",
+          "description": "Spending wallet private key (USDC on Base). Only required for the paid generate_video tool; quotes and polling work without it.",
+          "isRequired": false,
+          "isSecret": true,
+          "format": "string"
+        },
+        {
+          "name": "MAX_USD_PER_CALL",
+          "description": "Hard spend guard in USD — generate_video refuses quotes above this (default 5).",
+          "isRequired": false,
+          "format": "number"
+        },
+        {
+          "name": "GATEWAY_URL",
+          "description": "Alternate gateway instance (default https://api.x402-video.com).",
+          "isRequired": false,
+          "format": "string"
+        }
+      ]
+    }
+  ]
+}
