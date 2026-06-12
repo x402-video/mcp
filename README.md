@@ -8,7 +8,7 @@ Give any MCP-capable agent (Claude Code, Claude Desktop, Cursor, ...) the abilit
 quote_price → generate_video (pays exact USDC quote, gasless) → get_job → video_url
 ```
 
-Backed by [x402-video.com](https://x402-video.com): ~$0.45 for a 5s 720p clip,
+Backed by [x402video.com](https://x402video.com): ~$0.45 for a 5s 720p clip,
 custom 4–15s up to 1080p with optional audio ($0.13–$4.62). Prompts are screened
 **before** payment — rejected requests are never charged.
 
@@ -61,7 +61,7 @@ only `generate_video` requires the wallet.
 |---|---|---|
 | `BUYER_PRIVATE_KEY` | — | Spending wallet key (USDC on Base). Required only for `generate_video`. |
 | `MAX_USD_PER_CALL` | `5` | Hard spend guard — `generate_video` refuses quotes above this. |
-| `GATEWAY_URL` | `https://api.x402-video.com` | Point at another gateway instance. |
+| `GATEWAY_URL` | `https://api.x402video.com` | Point at another gateway instance. |
 
 ## How payment works
 

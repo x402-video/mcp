@@ -1,8 +1,8 @@
 {
   "name": "x402-video-mcp",
-  "version": "0.1.1",
-  "mcpName": "io.github.x402-video/mcp",
-  "description": "MCP server for x402-video.com — pay-per-call AI video generation over the x402 protocol (USDC on Base). Quote, pay, generate, poll — no accounts, no API keys.",
+  "version": "0.1.2",
+  "mcpName": "io.github.x402-video/seedance-video-generation",
+  "description": "MCP server for x402video.com — pay-per-call AI video generation over the x402 protocol (USDC on Base). Quote, pay, generate, poll — no accounts, no API keys.",
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -23,7 +23,7 @@
     "type": "git",
     "url": "git+https://github.com/x402-video/mcp.git"
   },
-  "homepage": "https://x402-video.com",
+  "homepage": "https://x402video.com",
   "keywords": [
     "mcp",
     "model-context-protocol",

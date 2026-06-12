@@ -1,18 +1,20 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
-  "name": "io.github.x402-video/mcp",
-  "description": "Pay-per-call AI video generation over x402 (USDC on Base). No accounts, no API keys.",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.x402-video/seedance-video-generation",
+  "title": "x402 Video — AI Video Generation (pay-per-call, no account)",
+  "description": "Pay-per-call AI video generation (Seedance text-to-video) via x402. USDC on Base, no API key.",
   "repository": {
     "url": "https://github.com/x402-video/mcp",
     "source": "github"
   },
-  "version": "0.1.1",
+  "websiteUrl": "https://x402video.com",
+  "version": "0.1.3",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "x402-video-mcp",
-      "version": "0.1.1",
+      "version": "0.1.3",
       "transport": {
         "type": "stdio"
       },
@@ -32,11 +34,31 @@
         },
         {
           "name": "GATEWAY_URL",
-          "description": "Alternate gateway instance (default https://api.x402-video.com).",
+          "description": "Alternate gateway instance (default https://api.x402video.com).",
           "isRequired": false,
           "format": "string"
         }
       ]
     }
-  ]
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "categories": ["video", "ai", "payments"],
+      "tags": [
+        "video-generation",
+        "text-to-video",
+        "ai-video",
+        "seedance",
+        "x402",
+        "usdc",
+        "base",
+        "pay-per-call",
+        "agent-payments",
+        "no-api-key",
+        "micropayments"
+      ],
+      "freeTools": ["list_skus", "get_stats", "quote_price", "get_job"],
+      "license": "MIT"
+    }
+  }
 }

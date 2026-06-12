@@ -3,8 +3,18 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const GATEWAY = (process.env.GATEWAY_URL ?? "https://api.x402-video.com").replace(/\/$/, "");
+const VERSION = "0.1.3";
+const GATEWAY = (process.env.GATEWAY_URL ?? "https://api.x402video.com").replace(/\/$/, "");
 const MAX_USD_PER_CALL = Number(process.env.MAX_USD_PER_CALL ?? "5");
+
+// Channel attribution for the gateway's ledger: which MCP host (Claude, Cursor, ...)
+// the buyer is calling from. No wallet or user data — name/version only.
+function trackingHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { "user-agent": `x402-video-mcp/${VERSION}` };
+  const info = server.server.getClientVersion();
+  if (info?.name) headers["x-client"] = `${info.name}/${info.version ?? "?"}`.slice(0, 64);
+  return headers;
+}
 
 const RATIOS = ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9", "adaptive"] as const;
 const RESOLUTIONS = ["480p", "720p", "1080p"] as const;
@@ -54,7 +64,7 @@ function buildRequest(args: GenerateArgs): { url: string; body: Record<string, u
 async function probe(url: string, body: Record<string, unknown>) {
   const res = await fetch(url, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", ...trackingHeaders() },
     body: JSON.stringify(body),
   });
   const text = await res.text();
@@ -120,7 +130,7 @@ function jsonResult(value: unknown) {
   return { content: [{ type: "text" as const, text: JSON.stringify(value, null, 2) }] };
 }
 
-const server = new McpServer({ name: "x402-video", version: "0.1.0" });
+const server = new McpServer({ name: "x402-video", version: VERSION });
 
 server.registerTool(
   "list_skus",
@@ -186,7 +196,7 @@ server.registerTool(
     const pay = await getPayingFetch();
     const res = await pay(url, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...trackingHeaders() },
       body: JSON.stringify(body),
     });
     const json: any = await res.json().catch(() => null);
