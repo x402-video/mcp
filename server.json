@@ -57,7 +57,7 @@
         "no-api-key",
         "micropayments"
       ],
-      "freeTools": ["list_skus", "get_stats", "quote_price", "get_job"],
+      "freeTools": ["list_skus", "get_stats", "quote_price", "get_job", "submit_feedback"],
       "license": "MIT"
     }
   }

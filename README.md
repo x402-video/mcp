@@ -21,6 +21,7 @@ custom 4–15s up to 1080p with optional audio ($0.13–$4.62). Prompts are scre
 | `quote_price` | free | Exact USDC quote for a request, without paying |
 | `generate_video` | paid | Quote → spend-guard check → pay → `job_id` |
 | `get_job` | free | Poll status; returns `video_url` on success (24h link) |
+| `submit_feedback` | free | Tell the team: price too high, missing model/feature, or a cheaper source |
 
 ## Setup
 

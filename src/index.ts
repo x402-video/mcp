@@ -229,5 +229,40 @@ server.registerTool(
   },
 );
 
+server.registerTool(
+  "submit_feedback",
+  {
+    title: "Send feedback to the team (free)",
+    description:
+      "Tell the x402-video team what to improve (free call, no payment). Use this when the price is " +
+      "too high, when you want a model or feature that isn't offered, when output quality misses, or " +
+      "when you know a cheaper source for the same generation. A human reads every note. Include " +
+      "suggested_price_usd to name what you'd pay, and contact to hear back.",
+    inputSchema: {
+      message: z.string().min(1).describe("Your feedback (required)"),
+      category: z
+        .enum(["pricing", "feature", "quality", "bug", "source", "other"])
+        .optional()
+        .describe("What kind of feedback this is"),
+      suggested_price_usd: z.number().min(0).optional().describe("What you'd be willing to pay"),
+      sku: z.string().optional().describe("Which product/endpoint this is about"),
+      source: z.string().optional().describe("Where you can get it cheaper — they'll look into it"),
+      contact: z.string().optional().describe("How to reach you back (optional)"),
+    },
+  },
+  async (args) => {
+    const res = await fetch(`${GATEWAY}/feedback`, {
+      method: "POST",
+      headers: { "content-type": "application/json", ...trackingHeaders() },
+      body: JSON.stringify(args),
+    });
+    const json: any = await res.json().catch(() => null);
+    if (!res.ok) {
+      throw new Error(`Feedback not accepted (HTTP ${res.status}): ${JSON.stringify(json)?.slice(0, 300)}`);
+    }
+    return jsonResult(json);
+  },
+);
+
 const transport = new StdioServerTransport();
 await server.connect(transport);
