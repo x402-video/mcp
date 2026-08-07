@@ -3,9 +3,12 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const VERSION = "0.1.3";
+const VERSION = "0.2.0";
 const GATEWAY = (process.env.GATEWAY_URL ?? "https://api.x402video.com").replace(/\/$/, "");
 const MAX_USD_PER_CALL = Number(process.env.MAX_USD_PER_CALL ?? "5");
+
+// Mirror gateway POST /feedback categories (unknown values collapse to "other" server-side).
+const FEEDBACK_CATEGORIES = ["pricing", "feature", "quality", "bug", "source", "other"] as const;
 
 // Channel attribution for the gateway's ledger: which MCP host (Claude, Cursor, ...)
 // the buyer is calling from. No wallet or user data — name/version only.
@@ -226,6 +229,93 @@ server.registerTool(
     const res = await fetch(`${GATEWAY}/jobs/${encodeURIComponent(job_id)}`);
     if (!res.ok) throw new Error(`Job lookup failed (HTTP ${res.status})`);
     return jsonResult(await res.json());
+  },
+);
+
+server.registerTool(
+  "submit_feedback",
+  {
+    title: "Send product feedback to humans (free)",
+    description:
+      "Free call, no payment or wallet required. A human reads every note. " +
+      "Use when a price looks wrong, output quality is poor, a model/feature is missing " +
+      "(e.g. wait_for_job, reference images, vertical ratio), you know a cheaper source, " +
+      "or you hit a bug. Prefer this over silently retrying or dropping the task.",
+    inputSchema: {
+      message: z
+        .string()
+        .min(4)
+        .max(2000)
+        .describe("What you want the human operators to know or change"),
+      category: z
+        .enum(FEEDBACK_CATEGORIES)
+        .optional()
+        .describe(
+          "pricing | feature | quality | bug | source (cheaper competitor) | other. Default other.",
+        ),
+      suggested_price_usd: z
+        .number()
+        .min(0)
+        .max(1000)
+        .optional()
+        .describe("What you'd be willing to pay for this (USD)"),
+      sku: z
+        .string()
+        .max(120)
+        .optional()
+        .describe("Which product/endpoint this is about (e.g. seedance-fast-5s-720p)"),
+      source: z
+        .string()
+        .max(500)
+        .optional()
+        .describe("Where you can get it cheaper (competitor / endpoint) — operators will look into it"),
+      contact: z
+        .string()
+        .max(200)
+        .optional()
+        .describe("Optional way to reach you back (email, X handle, etc.)"),
+    },
+  },
+  async (args) => {
+    // Never throw: feedback must not break the agent mainline (generation / polling).
+    const body: Record<string, unknown> = {
+      message: args.message,
+      category: args.category ?? "other",
+    };
+    if (args.suggested_price_usd !== undefined) body.suggested_price_usd = args.suggested_price_usd;
+    if (args.sku) body.sku = args.sku;
+    if (args.source) body.source = args.source;
+    if (args.contact) body.contact = args.contact;
+
+    try {
+      const res = await fetch(`${GATEWAY}/feedback`, {
+        method: "POST",
+        headers: { "content-type": "application/json", ...trackingHeaders() },
+        body: JSON.stringify(body),
+        signal: AbortSignal.timeout(8000),
+      });
+      const json: any = await res.json().catch(() => null);
+      if (!res.ok) {
+        return jsonResult({
+          ok: false,
+          status: res.status,
+          error: json?.error ?? res.statusText,
+          note: "Feedback not delivered; this does not affect video generation.",
+        });
+      }
+      return jsonResult({
+        ok: true,
+        feedback_id: json?.feedback_id,
+        received_at: json?.received_at,
+        note: json?.note ?? "Thanks — a human reads every note.",
+      });
+    } catch (err) {
+      return jsonResult({
+        ok: false,
+        error: err instanceof Error ? err.message : String(err),
+        note: "Feedback not delivered; this does not affect video generation.",
+      });
+    }
   },
 );
 

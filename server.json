@@ -8,13 +8,13 @@
     "source": "github"
   },
   "websiteUrl": "https://x402video.com",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "x402-video-mcp",
-      "version": "0.1.3",
+      "version": "0.2.0",
       "transport": {
         "type": "stdio"
       },
@@ -57,7 +57,7 @@
         "no-api-key",
         "micropayments"
       ],
-      "freeTools": ["list_skus", "get_stats", "quote_price", "get_job"],
+      "freeTools": ["list_skus", "get_stats", "quote_price", "get_job", "submit_feedback"],
       "license": "MIT"
     }
   }

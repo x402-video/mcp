@@ -21,6 +21,7 @@ custom 4–15s up to 1080p with optional audio ($0.13–$4.62). Prompts are scre
 | `quote_price` | free | Exact USDC quote for a request, without paying |
 | `generate_video` | paid | Quote → spend-guard check → pay → `job_id` |
 | `get_job` | free | Poll status; returns `video_url` on success (24h link) |
+| `submit_feedback` | free | Tell humans: price / missing feature / quality / bug / cheaper source |
 
 ## Setup
 
@@ -52,8 +53,23 @@ claude mcp add x402-video \
 }
 ```
 
-Without `BUYER_PRIVATE_KEY` the free tools (catalog, quotes, job polling) still work;
+Without `BUYER_PRIVATE_KEY` the free tools (catalog, quotes, job polling, feedback) still work;
 only `generate_video` requires the wallet.
+
+### Feedback (free)
+
+Agents can report product needs without paying:
+
+```
+submit_feedback({
+  message: "Need wait_for_job so I don't burn tokens polling",
+  category: "feature",
+  suggested_price_usd: 0.5
+})
+```
+
+Categories: `pricing` | `feature` | `quality` | `bug` | `source` | `other`.
+Also available as raw HTTP: `POST https://api.x402video.com/feedback`.
 
 ## Environment variables
 
