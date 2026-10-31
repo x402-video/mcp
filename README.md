@@ -8,9 +8,11 @@ Give any MCP-capable agent (Claude Code, Claude Desktop, Cursor, ...) the abilit
 quote_price → generate_video (pays exact USDC quote, gasless) → get_job → video_url
 ```
 
-Backed by [x402video.com](https://x402video.com): ~$0.45 for a 5s 720p clip,
-custom 4–15s up to 1080p with optional audio ($0.13–$4.62). Prompts are screened
-**before** payment — rejected requests are never charged.
+Backed by [x402video.com](https://x402video.com). Seedance 2.0, 5s 720p:
+Mini $0.67, Fast $1.05, Standard $1.33 per clip. Custom 4–15s with optional audio:
+Mini $0.26–$2.00 and Fast $0.40–$3.15 (480p/720p), Standard $0.49–$9.82 (up to 1080p).
+The exact USDC price is always the live 402 quote. Prompts are screened
+**before** payment; rejected requests are never charged.
 
 ## Tools
 
@@ -76,7 +78,7 @@ Also available as raw HTTP: `POST https://api.x402video.com/feedback`.
 | Var | Default | |
 |---|---|---|
 | `BUYER_PRIVATE_KEY` | — | Spending wallet key (USDC on Base). Required only for `generate_video`. |
-| `MAX_USD_PER_CALL` | `5` | Hard spend guard — `generate_video` refuses quotes above this. |
+| `MAX_USD_PER_CALL` | `5` | Hard spend guard — `generate_video` refuses quotes above this. Raise MAX_USD_PER_CALL for long 1080p Standard jobs (up to $9.82). |
 | `GATEWAY_URL` | `https://api.x402video.com` | Point at another gateway instance. |
 
 ## How payment works

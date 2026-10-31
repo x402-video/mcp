@@ -3,7 +3,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 
-const VERSION = "0.2.0";
+const VERSION = "0.2.1";
 const GATEWAY = (process.env.GATEWAY_URL ?? "https://api.x402video.com").replace(/\/$/, "");
 const MAX_USD_PER_CALL = Number(process.env.MAX_USD_PER_CALL ?? "5");
 
@@ -141,7 +141,7 @@ server.registerTool(
     title: "List video SKUs and prices",
     description:
       "Live catalog of pay-per-call video generation endpoints with current USD prices (free call). " +
-      "Fixed-price SKUs (~$0.45-0.56 for 5s 720p) and custom endpoints (4-15s, up to 1080p, optional audio).",
+      "Fixed-price SKUs ($0.67-1.33 for 5s 720p) and custom endpoints (4-15s, up to 1080p, optional audio).",
   },
   async () => {
     const res = await fetch(`${GATEWAY}/`);
